@@ -1,17 +1,22 @@
 package org.example;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JsonHandler {
+    private static final Pattern ENTRY_PATTERN = Pattern.compile(
+            "\"domain\"\\s*:\\s*\"([^\"]+)\"\\s*,\\s*\"ip\"\\s*:\\s*\"([^\"]+)\""
+    );
+
     public List<DomainEntry> parseJson(String json) {
         List<DomainEntry> entries = new ArrayList<>();
         if (json == null || json.isEmpty()) return entries;
 
-        json = json.replaceAll("[{}\\[\\]\"]", "").trim();
-        String[] pairs = json.split("domain:|ip:");
-        for (int i = 1; i < pairs.length; i += 2) {
-            String domain = pairs[i].trim().replace(",", "");
-            String ip = pairs[i + 1].trim().replace(",", "");
+        Matcher matcher = ENTRY_PATTERN.matcher(json);
+        while (matcher.find()) {
+            String domain = matcher.group(1).trim();
+            String ip = matcher.group(2).trim();
             entries.add(new DomainEntry(domain, ip));
         }
         return entries;
@@ -20,7 +25,8 @@ public class JsonHandler {
     public String toJson(List<DomainEntry> entries) {
         StringBuilder json = new StringBuilder("{\"addresses\":[");
         for (DomainEntry entry : entries) {
-            json.append("{\"domain\":\"").append(entry.getDomain()).append("\",\"ip\":\"").append(entry.getIp()).append("\"},");
+            json.append("{\"domain\":\"").append(entry.getDomain())
+                    .append("\",\"ip\":\"").append(entry.getIp()).append("\"},");
         }
         if (!entries.isEmpty()) {
             json.deleteCharAt(json.length() - 1);

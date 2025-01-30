@@ -14,11 +14,14 @@ public class DomainManager {
     // Получение списка пар "домен – адрес" из файла
     public void printDomainAddressList() {
         List<DomainEntry> entries = jsonHandler.parseJson(sftpClient.readFile());
-        if (entries != null) {
-            entries.sort(DomainEntry::compareTo);
-            entries.forEach(entry ->
-                    System.out.println("Домен: " + entry.getDomain() + ", IP: " + entry.getIp()));
+        if (entries == null) {
+            System.out.println("Ошибка чтения данных.");
+            return;
         }
+        entries.sort(DomainEntry::compareTo);
+        entries.forEach(entry ->
+                System.out.println("Домен: " + entry.getDomain() + ", IP: " + entry.getIp()));
+
     }
 
     // Получение IP-адреса по доменному имени
@@ -26,15 +29,17 @@ public class DomainManager {
         System.out.print("Введите доменное имя: ");
         String domain = scanner.nextLine();
         List<DomainEntry> entries = jsonHandler.parseJson(sftpClient.readFile());
-        if (entries != null) {
-            Optional<DomainEntry> result = entries.stream()
-                    .filter(entry -> entry.getDomain().equals(domain))
-                    .findFirst();
-            if (result.isPresent()) {
-                System.out.println("IP-адрес: " + result.get().getIp());
-            } else {
-                System.out.println("Домен не найден.");
-            }
+        if (entries == null) {
+            System.out.println("Ошибка чтения данных.");
+            return;
+        }
+        Optional<DomainEntry> result = entries.stream()
+                .filter(entry -> entry.getDomain().equals(domain))
+                .findFirst();
+        if (result.isPresent()) {
+            System.out.println("IP-адрес: " + result.get().getIp());
+        } else {
+            System.out.println("Домен не найден.");
         }
     }
 
@@ -49,17 +54,17 @@ public class DomainManager {
         }
         //Поиск данных
         List<DomainEntry> entries = jsonHandler.parseJson(sftpClient.readFile());
-        if (entries != null) {
-            Optional<DomainEntry> result = entries.stream()
-                    .filter(entry -> entry.getIp().equals(ip))
-                    .findFirst();
-            if (result.isPresent()) {
-                System.out.println("Домен: " + result.get().getDomain());
-            } else {
-                System.out.println("IP-адрес не найден.");
-            }
-        } else {
+        if (entries == null) {
             System.out.println("Ошибка чтения данных.");
+            return;
+        }
+        Optional<DomainEntry> result = entries.stream()
+                .filter(entry -> entry.getIp().equals(ip))
+                .findFirst();
+        if (result.isPresent()) {
+            System.out.println("Домен: " + result.get().getDomain());
+        } else {
+            System.out.println("IP-адрес не найден.");
         }
     }
 

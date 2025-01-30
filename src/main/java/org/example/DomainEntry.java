@@ -5,7 +5,7 @@ public class DomainEntry implements Comparable<DomainEntry> {
     private final String ip;
 
     public DomainEntry(String domain, String ip) {
-        this.domain = domain;
+        this.domain = domain.toLowerCase();
         this.ip = ip;
     }
 

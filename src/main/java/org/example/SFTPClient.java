@@ -28,6 +28,7 @@ public class SFTPClient {
             System.out.println("Подключение к SFTP-серверу успешно.");
 
         } catch (JSchException e) {
+            System.err.println("Ошибка подключения: " + e.getMessage());
             isConnected = false;
         }
     }
