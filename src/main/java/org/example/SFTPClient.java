@@ -8,6 +8,7 @@ public class SFTPClient {
     private static final String SFTP_FILE = "upload/domains.json";
     private ChannelSftp sftpChannel;
     private Session session;
+    private boolean isConnected = false;
 
     public SFTPClient(String host, int port, String username, String password) {
         connect(host, port, username, password);
@@ -23,10 +24,16 @@ public class SFTPClient {
             Channel channel = session.openChannel("sftp");
             channel.connect();
             sftpChannel = (ChannelSftp) channel;
+            isConnected = true;
             System.out.println("Подключение к SFTP-серверу успешно.");
+
         } catch (JSchException e) {
-            System.err.println("Ошибка подключения к SFTP-серверу: " + e.getMessage());
+            isConnected = false;
         }
+    }
+
+    public boolean isConnected() {
+        return isConnected;
     }
 
     public String readFile() {
