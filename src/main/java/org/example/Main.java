@@ -69,7 +69,7 @@ public class Main {
                             running = false;
                             break;
                         default:
-                            System.out.println("Неверный выбор. Попробуйте снова.");
+                            System.out.println("Неверный ввод. Введите число от 1 до 6.");
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Неверный ввод. Введите число от 1 до 6.");
@@ -77,8 +77,6 @@ public class Main {
             }
 
             sftpClient.disconnect();
-        } else {
-            System.out.println("Не удалось подключиться к SFTP-серверу. Программа завершена.");
         }
     }
 }

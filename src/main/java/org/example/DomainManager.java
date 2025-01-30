@@ -69,34 +69,36 @@ public class DomainManager {
 
     // Добавление новой пары "домен – адрес" в файл
     public void addDomainAddress(Scanner scanner) {
+        List<DomainEntry> entries = getEntries();
+
         System.out.print("Введите доменное имя: ");
         String domain = scanner.nextLine().trim();
-        System.out.print("Введите IP-адрес: ");
-        String ip = scanner.nextLine().trim();
-
         // Валидация домена
         if (!Validator.isValidDomain(domain)) {
             System.out.println("Некорректный домен. Пример: example.com");
             return;
         }
+        // Проверка на уникальность домена
+        boolean domainExists = entries.stream().anyMatch(e -> e.getDomain().equalsIgnoreCase(domain));
+        if (domainExists) {
+            System.out.println("Домен '" + domain + "' уже существует.");
+            return;
+        }
+
+        System.out.print("Введите IP-адрес: ");
+        String ip = scanner.nextLine().trim();
         // Валидация IP
         if (!Validator.isValidIp(ip)) {
             System.out.println("Некорректный IP-адрес. Формат Ipv4: XXX.XXX.XXX.XXX (0-255).");
             return;
         }
-        List<DomainEntry> entries = getEntries();
-        // Проверка на уникальность домена или IP
-        boolean domainExists = entries.stream().anyMatch(e -> e.getDomain().equalsIgnoreCase(domain));
+        // Проверка на уникальность IP
         boolean ipExists = entries.stream().anyMatch(e -> e.getIp().equals(ip));
-
-        if (domainExists) {
-            System.out.println("Домен '" + domain + "' уже существует.");
-            return;
-        }
         if (ipExists) {
             System.out.println("IP-адрес '" + ip + "' уже существует.");
             return;
         }
+
         entries.add(new DomainEntry(domain, ip));
         sftpClient.writeFile(jsonHandler.toJson(entries));
         System.out.println("Пара добавлена успешно.");
