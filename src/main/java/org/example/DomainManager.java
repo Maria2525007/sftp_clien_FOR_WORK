@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DomainManager {
     private final SFTPClient sftpClient;
@@ -11,13 +12,19 @@ public class DomainManager {
         this.jsonHandler = new JsonHandler();
     }
 
+    // Универсальный метод для получения данных
+    private List<DomainEntry> getEntries() {
+        String json = sftpClient.readFile();
+        if (json == null) {
+            System.out.println("Ошибка чтения файла.");
+            return new ArrayList<>();
+        }
+        return jsonHandler.parseJson(json);
+    }
+
     // Получение списка пар "домен – адрес" из файла
     public void printDomainAddressList() {
-        List<DomainEntry> entries = jsonHandler.parseJson(sftpClient.readFile());
-        if (entries == null) {
-            System.out.println("Ошибка чтения данных.");
-            return;
-        }
+        List<DomainEntry> entries = getEntries();
         entries.sort(DomainEntry::compareTo);
         entries.forEach(entry ->
                 System.out.println("Домен: " + entry.getDomain() + ", IP: " + entry.getIp()));
@@ -28,11 +35,7 @@ public class DomainManager {
     public void getIpByDomain(Scanner scanner) {
         System.out.print("Введите доменное имя: ");
         String domain = scanner.nextLine();
-        List<DomainEntry> entries = jsonHandler.parseJson(sftpClient.readFile());
-        if (entries == null) {
-            System.out.println("Ошибка чтения данных.");
-            return;
-        }
+        List<DomainEntry> entries = getEntries();
         Optional<DomainEntry> result = entries.stream()
                 .filter(entry -> entry.getDomain().equals(domain))
                 .findFirst();
@@ -53,11 +56,7 @@ public class DomainManager {
             return;
         }
         //Поиск данных
-        List<DomainEntry> entries = jsonHandler.parseJson(sftpClient.readFile());
-        if (entries == null) {
-            System.out.println("Ошибка чтения данных.");
-            return;
-        }
+        List<DomainEntry> entries = getEntries();
         Optional<DomainEntry> result = entries.stream()
                 .filter(entry -> entry.getIp().equals(ip))
                 .findFirst();
@@ -74,9 +73,10 @@ public class DomainManager {
         String domain = scanner.nextLine().trim();
         System.out.print("Введите IP-адрес: ");
         String ip = scanner.nextLine().trim();
-        List<DomainEntry> entries = jsonHandler.parseJson(sftpClient.readFile());
-        if (entries == null) {
-            System.out.println("Ошибка чтения данных.");
+
+        // Валидация домена
+        if (!Validator.isValidDomain(domain)) {
+            System.out.println("Некорректный домен. Пример: example.com");
             return;
         }
         // Валидация IP
@@ -84,6 +84,7 @@ public class DomainManager {
             System.out.println("Некорректный IP-адрес. Формат Ipv4: XXX.XXX.XXX.XXX (0-255).");
             return;
         }
+        List<DomainEntry> entries = getEntries();
         // Проверка на уникальность домена или IP
         boolean domainExists = entries.stream().anyMatch(e -> e.getDomain().equalsIgnoreCase(domain));
         boolean ipExists = entries.stream().anyMatch(e -> e.getIp().equals(ip));
@@ -105,11 +106,7 @@ public class DomainManager {
     public void removeDomainAddress(Scanner scanner) {
         System.out.print("Введите доменное имя или IP-адрес: ");
         String input = scanner.nextLine().trim();
-        List<DomainEntry> entries = jsonHandler.parseJson(sftpClient.readFile());
-        if (entries == null) {
-            System.out.println("Ошибка чтения данных.");
-            return;
-        }
+        List<DomainEntry> entries = getEntries();
         boolean isIp = Validator.isValidIp(input);
         boolean removed = entries.removeIf(entry ->
                 (isIp && entry.getIp().equals(input)) ||
