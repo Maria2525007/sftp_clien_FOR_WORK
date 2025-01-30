@@ -23,7 +23,7 @@ public class JsonHandler {
             json.append("{\"domain\":\"").append(entry.getDomain()).append("\",\"ip\":\"").append(entry.getIp()).append("\"},");
         }
         if (!entries.isEmpty()) {
-            json.deleteCharAt(json.length() - 1); // Удаляем последнюю запятую
+            json.deleteCharAt(json.length() - 1);
         }
         json.append("]}");
         return json.toString();

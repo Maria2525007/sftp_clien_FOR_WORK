@@ -1,8 +1,8 @@
 package org.example;
 
 public class DomainEntry implements Comparable<DomainEntry> {
-    private String domain;
-    private String ip;
+    private final String domain;
+    private final String ip;
 
     public DomainEntry(String domain, String ip) {
         this.domain = domain;

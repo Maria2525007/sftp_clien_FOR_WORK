@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 public class SFTPClient {
-    private static final String SFTP_FILE = "domains.json";
+    private static final String SFTP_FILE = "upload/domains.json";
     private ChannelSftp sftpChannel;
     private Session session;
 
