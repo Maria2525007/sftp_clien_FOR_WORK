@@ -5,9 +5,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        // Ввод адреса SFTP-сервера (может быть IPv4 или доменным именем)
         System.out.print("Введите адрес SFTP-сервера: ");
         String host = scanner.nextLine();
 
+        // Ввод и валидация порта
         String portInput;
         int port;
         while (true) {
@@ -21,14 +23,16 @@ public class Main {
             }
         }
 
+        // Ввод логина и пароля
         System.out.print("Введите логин: ");
         String username = scanner.nextLine();
-
         System.out.print("Введите пароль: ");
         String password = scanner.nextLine();
 
+        // Подключение к SFTP-серверу
         SFTPClient sftpClient = new SFTPClient(host, port, username, password);
 
+        // Проверка успешности подключения
         if (sftpClient.isConnected()) {
             DomainManager domainManager = new DomainManager(sftpClient);
 
