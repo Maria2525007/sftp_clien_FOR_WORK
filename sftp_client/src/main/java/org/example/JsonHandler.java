@@ -13,14 +13,18 @@ public class JsonHandler {
         List<DomainEntry> entries = new ArrayList<>();
         if (json == null || json.isEmpty()) return entries;
 
-        Matcher matcher = ENTRY_PATTERN.matcher(json);
+        String fixedJson = json.replaceAll(",\\s*}", "}");  // Убираем запятые перед закрывающей скобкой
+
+        Matcher matcher = ENTRY_PATTERN.matcher(fixedJson);
         while (matcher.find()) {
             String domain = matcher.group(1).trim();
             String ip = matcher.group(2).trim();
             entries.add(new DomainEntry(domain, ip));
         }
+
         return entries;
     }
+
 
     public String toJson(List<DomainEntry> entries) {
         StringBuilder json = new StringBuilder("{\"addresses\":[");

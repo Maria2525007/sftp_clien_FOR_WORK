@@ -3,5 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/sftp_client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sftp_client/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sftp_client_tests/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sftp_client_tests/src/main/resources" charset="UTF-8" />
   </component>
 </project>
