@@ -1,7 +1,6 @@
 package org.example;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DomainManager {
     private final SFTPClient sftpClient;

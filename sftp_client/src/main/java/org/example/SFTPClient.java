@@ -47,11 +47,13 @@ public class SFTPClient {
         }
     }
 
-    public void writeFile(String content) {
+    public boolean writeFile(String content) {
         try (OutputStream outputStream = sftpChannel.put(SFTP_FILE)) {
             outputStream.write(content.getBytes());
+            return true;
         } catch (Exception e) {
             System.err.println("Ошибка записи файла: " + e.getMessage());
+            return false;
         }
     }
 
