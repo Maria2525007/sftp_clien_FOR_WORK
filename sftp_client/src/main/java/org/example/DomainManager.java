@@ -12,7 +12,7 @@ public class DomainManager {
     }
 
     // Универсальный метод для получения данных
-    private List<DomainEntry> getEntries() {
+    List<DomainEntry> getEntries() {
         String json = sftpClient.readFile();
         if (json == null) {
             System.out.println("Ошибка чтения файла.");
