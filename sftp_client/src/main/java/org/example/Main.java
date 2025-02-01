@@ -78,5 +78,8 @@ public class Main {
 
             sftpClient.disconnect();
         }
+        else {
+            System.out.println("Не удалось подключиться к SFTP-серверу. Программа завершена.");
+        }
     }
 }

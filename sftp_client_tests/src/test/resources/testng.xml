@@ -1,8 +1,17 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="All Tests">
-    <test name="Validator Tests">
+    <test name="Unit Tests">
         <classes>
             <class name="org.example.ValidatorTest"/>
+            <class name="org.example.JsonHandlerTest"/>
+            <class name="org.example.DomainManagerTest">
+                <parameter name="sftpClientStub" value="org.example.SFTPClientStub"/>
+            </class>
+        </classes>
+    </test>
+    <test name="Integration Tests">
+        <classes>
+            <class name="org.example.SFTPClientTest"/>
         </classes>
     </test>
 </suite>

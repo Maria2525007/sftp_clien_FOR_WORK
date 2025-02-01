@@ -29,7 +29,6 @@ public class SFTPClient {
 
         } catch (JSchException e) {
             isConnected = false;
-            System.out.println("Не удалось подключиться к SFTP-серверу. Программа завершена.");
         }
     }
 
@@ -38,14 +37,23 @@ public class SFTPClient {
     }
 
     public String readFile() {
-        try (InputStream inputStream = sftpChannel.get(SFTP_FILE)) {
+        try {
+            InputStream inputStream = sftpChannel.get(SFTP_FILE);
+            if (inputStream == null) {
+                return null;
+            }
             Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
             return scanner.hasNext() ? scanner.next() : "";
-        } catch (Exception e) {
+        } catch (SftpException e) {
+            if (e.id == ChannelSftp.SSH_FX_NO_SUCH_FILE) {
+                return null;
+            }
             System.err.println("Ошибка чтения файла: " + e.getMessage());
             return null;
         }
     }
+
+
 
     public boolean writeFile(String content) {
         try (OutputStream outputStream = sftpChannel.put(SFTP_FILE)) {

@@ -11,7 +11,7 @@ public class DomainManager {
         this.jsonHandler = new JsonHandler();
     }
 
-    // Универсальный метод для получения данных
+    // Получение списка данных
     List<DomainEntry> getEntries() {
         String json = sftpClient.readFile();
         if (json == null) {
@@ -24,14 +24,14 @@ public class DomainManager {
     // Получение списка пар "домен – адрес" из файла
     public void printDomainAddressList() {
         List<DomainEntry> entries = getEntries();
-        entries.sort(DomainEntry::compareTo);
+        // Сортируем записи по доменному имени
+        entries.sort(Comparator.comparing(DomainEntry::getDomain));
         entries.forEach(entry ->
                 System.out.println("Домен: " + entry.getDomain() + ", IP: " + entry.getIp()));
-
     }
 
     // Получение IP-адреса по доменному имени
-    public void getIpByDomain(Scanner scanner) {
+    public String getIpByDomain(Scanner scanner) {
         System.out.print("Введите доменное имя: ");
         String domain = scanner.nextLine();
         List<DomainEntry> entries = getEntries();
@@ -39,20 +39,22 @@ public class DomainManager {
                 .filter(entry -> entry.getDomain().equals(domain))
                 .findFirst();
         if (result.isPresent()) {
-            System.out.println("IP-адрес: " + result.get().getIp());
+            return result.get().getIp();
         } else {
             System.out.println("Домен не найден.");
+            return null;
         }
     }
 
     // Получение доменного имени по IP-адресу
-    public void getDomainByIp(Scanner scanner) {
+    public String getDomainByIp(Scanner scanner) {
         System.out.print("Введите IP-адрес: ");
         String ip = scanner.nextLine().trim();
+
         // Валидация IP перед поиском
         if (!Validator.isValidIp(ip)) {
             System.out.println("Некорректный IP-адрес. Формат: XXX.XXX.XXX.XXX (0-255).");
-            return;
+            return null;
         }
         //Поиск данных
         List<DomainEntry> entries = getEntries();
@@ -60,9 +62,10 @@ public class DomainManager {
                 .filter(entry -> entry.getIp().equals(ip))
                 .findFirst();
         if (result.isPresent()) {
-            System.out.println("Домен: " + result.get().getDomain());
+            return result.get().getDomain();
         } else {
             System.out.println("IP-адрес не найден.");
+            return null;
         }
     }
 
