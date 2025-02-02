@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.model.DomainEntry;
+import org.example.utils.JsonHandler;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 import java.util.*;
