@@ -1,0 +1,18 @@
+#!/usr/bin/expect -f
+
+# Тест на ошибку аутентификации
+spawn java -jar sftp_client-1.0-SNAPSHOT.jar
+
+expect "Введите хост:"
+send "invalid_host\r"
+
+expect "Введите порт:"
+send "22\r"
+
+expect "Введите логин:"
+send "invalid_user\r"
+
+expect "Введите пароль:"
+send "invalid_password\r"
+
+expect "Ошибка подключения"

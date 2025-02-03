@@ -1,3 +1,4 @@
 Инструкция по сбоке проекта
 
-1)
+1) mnv clean package
+2) java -jar sftp_client\target\sftp_client-1.0-SNAPSHOT.jar

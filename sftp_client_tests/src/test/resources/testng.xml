@@ -2,16 +2,15 @@
 <suite name="All Tests">
     <test name="Unit Tests">
         <classes>
-            <class name="org.example.ValidatorTest"/>
-            <class name="org.example.JsonHandlerTest"/>
-            <class name="org.example.DomainManagerTest">
-                <parameter name="sftpClientStub" value="org.example.SFTPClientStub"/>
-            </class>
+            <class name="org.example.validation.ValidatorTest"/>
+            <class name="org.example.utils.JsonParserTest"/>
         </classes>
     </test>
     <test name="Integration Tests">
         <classes>
-            <class name="org.example.SFTPClientTest"/>
+            <class name="org.example.connection.SFTPClientTest">
+                <parameter name="sftpClientStub" value="org.example.connection.SFTPClientStub"/>
+            </class>
         </classes>
     </test>
 </suite>

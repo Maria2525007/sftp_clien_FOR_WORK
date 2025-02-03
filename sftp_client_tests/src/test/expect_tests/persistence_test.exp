@@ -1,0 +1,32 @@
+#!/usr/bin/expect -f
+
+# Первая сессия: Добавление записи
+spawn java -jar sftp_client-1.0-SNAPSHOT.jar
+
+# Подключение
+expect "Введите хост: " { send "172.19.60.50\r" }
+expect "Введите порт: " { send "22\r" }
+expect "Введите логин: " { send "sftp_user\r" }
+expect "Введите пароль: " { send "test123\r" }
+
+send "4\r"
+expect "Введите домен :" { send "test.domain\r" }
+expect "Введите IP :" { send "10.0.0.1\r" }
+expect "Успешно: Запись добавлена"
+send "6\r"
+expect eof
+
+# Вторая сессия: Проверка сохранения
+spawn java -jar sftp_client-1.0-SNAPSHOT.jar
+
+# Подключение
+expect "Введите хост: " { send "172.19.60.50\r" }
+expect "Введите порт: " { send "22\r" }
+expect "Введите логин: " { send "sftp_user\r" }
+expect "Введите пароль: " { send "test123\r" }
+
+send "1\r"
+expect "Домен: test.domain, IP: 10.0.0.1"
+send "6\r"
+expect eof
+

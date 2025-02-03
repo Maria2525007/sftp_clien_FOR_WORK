@@ -8,11 +8,11 @@ public class ValidationService {
     private static final String DOMAIN_PATTERN =
             "^(localhost|((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,})$";
 
-    public boolean isValidIp(String ip) {
+    public static boolean isValidIp(String ip) {
         return Pattern.matches(IPV4_PATTERN, ip);
     }
 
-    public boolean isValidDomain(String domain) {
+    public static boolean isValidDomain(String domain) {
         return Pattern.matches(DOMAIN_PATTERN, domain);
     }
 
