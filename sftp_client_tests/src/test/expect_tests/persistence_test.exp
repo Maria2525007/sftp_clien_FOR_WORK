@@ -1,32 +1,96 @@
 #!/usr/bin/expect -f
 
-# Первая сессия: Добавление записи
-spawn java -jar sftp_client-1.0-SNAPSHOT.jar
+#Проверка сохранения записи на сервере между сессиями
 
-# Подключение
-expect "Введите хост: " { send "172.19.60.50\r" }
-expect "Введите порт: " { send "22\r" }
-expect "Введите логин: " { send "sftp_user\r" }
-expect "Введите пароль: " { send "test123\r" }
+set timeout 20
+set jar_path "/mnt/d/work/sftp_clien_task/sftp_client/target/sftp_client-1.0-SNAPSHOT-jar-with-dependencies.jar"
 
+#Первое покдлючение
+
+spawn java -jar $jar_path
+
+expect "Введите хост:"
+send "172.19.60.50\r"
+
+expect "Введите порт:"
+send "22\r"
+
+expect "Введите логин:"
+send "sftp_user\r"
+
+expect "Введите пароль:"
+send "test123\r"
+
+expect {
+    "Подключение к SFTP-серверу успешно." { }
+    timeout { exit 1 }
+}
+
+# Проверка существования test.domain перед добавлением
+send "1\r"
+sleep 1
+set exists 0
+expect {
+    -re "test\\.domain" {
+        set exists 1
+    }
+    timeout {}
+}
+if {$exists} {
+    send "5\r"
+    expect "Введите домен / IP:"
+    send "test.domain\r"
+    expect "Запись успешно удалена" {}
+    timeout { exit 1 }
+}
+
+#Добавляем test.domain снова
 send "4\r"
-expect "Введите домен :" { send "test.domain\r" }
-expect "Введите IP :" { send "10.0.0.1\r" }
+expect "Введите домен: "
+send "test.domain\r"
+expect "Введите IP: "
+send "0.0.0.0\r"
 expect "Успешно: Запись добавлена"
+
 send "6\r"
 expect eof
 
 # Вторая сессия: Проверка сохранения
-spawn java -jar sftp_client-1.0-SNAPSHOT.jar
+spawn java -jar $jar_path
 
-# Подключение
-expect "Введите хост: " { send "172.19.60.50\r" }
-expect "Введите порт: " { send "22\r" }
-expect "Введите логин: " { send "sftp_user\r" }
-expect "Введите пароль: " { send "test123\r" }
+expect "Введите хост:"
+send "172.19.60.50\r"
+
+expect "Введите порт:"
+send "22\r"
+
+expect "Введите логин:"
+send "sftp_user\r"
+
+expect "Введите пароль:"
+send "test123\r"
+
+expect {
+    "Подключение к SFTP-серверу успешно." { }
+    timeout { puts "ОШИБКА: Не удалось подключиться к SFTP-серверу."; exit 1 }
+}
 
 send "1\r"
-expect "Домен: test.domain, IP: 10.0.0.1"
-send "6\r"
-expect eof
+sleep 1
 
+set exists 0
+expect {
+    -re "Домен: test\\.domain, IP: 0\\.0\\.0\\.0" {
+        set exists 1
+    }
+    timeout {}
+}
+
+if {$exists} {
+    send "6\r"
+    expect eof
+    puts "Тест успешно пройден"
+} else {
+    puts "ОШИБКА: test.domain не найден после повторного запуска"
+    exit 1
+}
