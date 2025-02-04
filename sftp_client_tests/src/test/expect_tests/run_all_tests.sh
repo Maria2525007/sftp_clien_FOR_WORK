@@ -20,7 +20,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Запуск теста persistence_test..."
-expect ./persistence_test.exp; bash
+expect ./persistence_test.exp
 
 if [ $? -ne 0 ]; then
     echo "Тест persistence_test не прошел!"
