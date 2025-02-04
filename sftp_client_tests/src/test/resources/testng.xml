@@ -1,16 +1,17 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="All Tests">
+<suite name="All Tests" parallel="false">
+
     <test name="Unit Tests">
         <classes>
             <class name="org.example.validation.ValidatorTest"/>
             <class name="org.example.utils.JsonParserTest"/>
         </classes>
     </test>
+
     <test name="Integration Tests">
+        <parameter name="sftpClientStub" value="org.example.connection.SFTPClientStub"/>
         <classes>
-            <class name="org.example.connection.SFTPClientTest">
-                <parameter name="sftpClientStub" value="org.example.connection.SFTPClientStub"/>
-            </class>
+            <class name="org.example.connection.SFTPClientTest"/>
         </classes>
     </test>
 </suite>
