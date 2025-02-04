@@ -1,7 +1,7 @@
 #!/usr/bin/expect -f
 
 set timeout 10
-set jar_path "/mnt/d/work/sftp_clien_task/sftp_client/target/sftp_client-1.0-SNAPSHOT-jar-with-dependencies.jar"
+set jar_path "../../../../sftp_client/target/sftp_client-1.0-SNAPSHOT-jar-with-dependencies.jar"
 
 spawn java -jar $jar_path
 

@@ -3,7 +3,7 @@
 #Проверка сохранения записи на сервере между сессиями
 
 set timeout 20
-set jar_path "/mnt/d/work/sftp_clien_task/sftp_client/target/sftp_client-1.0-SNAPSHOT-jar-with-dependencies.jar"
+set jar_path "../../../../sftp_client/target/sftp_client-1.0-SNAPSHOT-jar-with-dependencies.jar"
 
 #Первое покдлючение
 
