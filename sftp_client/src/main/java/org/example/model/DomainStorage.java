@@ -17,7 +17,7 @@ public class DomainStorage {
     }
 
     private void loadData() {
-        String json = dataService.readFile("upload/domains.json");
+        String json = dataService.readFile("domains.json");
         if (json != null && !json.trim().isEmpty()) {
             entries.clear();
             entries.addAll(jsonParser.parse(json));
@@ -27,7 +27,7 @@ public class DomainStorage {
 
     public void saveData() {
         String json = jsonParser.serialize(entries);
-        dataService.writeFile("upload/domains.json", json);
+        dataService.writeFile("domains.json", json);
     }
 
     public List<DomainEntry> getEntries() {

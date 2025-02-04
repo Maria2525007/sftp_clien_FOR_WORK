@@ -25,7 +25,6 @@ public class SFTPClient {
             isConnected = true;
             System.out.println("Подключение к SFTP-серверу успешно.");
         } catch (JSchException e) {
-            System.err.println("Ошибка подключения: " + e.getMessage());
             if (e.getMessage().contains("Auth fail")) {
                 System.err.println("Неверный логин/пароль");
             }

@@ -17,6 +17,7 @@ public class JsonParserTest {
 
     // Позитивные тесты
 
+    // Тест на парсинг корректный данных  из файла
     @Test
     public void testParseValidJson() throws IOException {
         String json = readResourceFile("test_domains.json");
@@ -29,6 +30,7 @@ public class JsonParserTest {
         assertEquals(entries.get(1).getIp(), "10.0.0.1");
     }
 
+    // Тест на парсинг пустого файла
     @Test
     public void testParseEmptyJson() throws IOException {
         String json = readResourceFile("empty_domains.json");
@@ -36,6 +38,7 @@ public class JsonParserTest {
         assertTrue(entries.isEmpty());
     }
 
+    // Тест на сериализацию данных в файл
     @Test
     public void testSerializeValidData() {
         List<DomainEntry> entries = Arrays.asList(
@@ -50,6 +53,7 @@ public class JsonParserTest {
         assertTrue(json.contains("\"ip\":\"10.0.0.1\""));
     }
 
+    // Тест на сериализацию пустых данных
     @Test
     public void testSerializeEmptyData() {
         List<DomainEntry> entries = Collections.emptyList();
@@ -59,6 +63,7 @@ public class JsonParserTest {
 
     // Негативные тесты
 
+    // Тест на парсинг поломанного файла
     @Test
     public void testParseCorruptedJson() throws IOException {
         String json = readResourceFile("broken_json.json");
@@ -66,6 +71,7 @@ public class JsonParserTest {
         assertEquals(entries.size(), 0);
     }
 
+    // Тест на сериализацию неправильных данных
     @Test
     public void testParseInvalidStructure() {
         String json = "{\"invalid_key\":[]}";

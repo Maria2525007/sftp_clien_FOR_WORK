@@ -50,7 +50,7 @@ public class Application {
         ValidationService validator = new ValidationService();
 
         // Проверка наличия файла с данными
-        String fileContent = sftpClient.readFile("upload/domains.json");
+        String fileContent = sftpClient.readFile("domains.json");
         if (fileContent == null || fileContent.isEmpty()) {
             System.err.println("Ошибка: не удалось прочитать файл. Завершение работы.");
             sftpClient.disconnect();
